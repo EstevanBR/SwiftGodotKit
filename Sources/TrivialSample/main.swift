@@ -17,19 +17,19 @@ func propInfo (from: GDictionary) -> PropInfo? {
     guard let hint = Int (from ["hint"] ?? Variant (Nil())) else { return nil }
     guard let hint_string = from ["hint_string"]?.description else { return nil }
     guard let usage = Int (from ["usage"] ?? Variant (Nil())) else { return nil }
-    return PropInfo(propertyType: Variant.GType(rawValue: type)!,
+    return PropInfo(propertyType: Variant.GType(rawValue: Int64(type))!,
                     propertyName: StringName(stringLiteral: name),
                     className: StringName (stringLiteral: className),
-                    hint: PropertyHint (rawValue: hint)!,
+                    hint: PropertyHint (rawValue: Int64(hint))!,
                     hintStr: GString (stringLiteral: hint_string),
-                    usage: PropertyUsageFlags(rawValue: usage))
+                    usage: PropertyUsageFlags(rawValue: Int(usage)))
 }
 
 func second (scene: SceneTree) {
     let r = GD.load(path: "res://Assets/Scancardium_2.0.ttf")
     let properties = ClassDB.classGetPropertyList (class: StringName ("Node2D"))
     print ("Elements: \(properties.count)")
-    var a = GArray()
+    let a = GArray()
     a.append(value: Variant ("Hello"))
     a.append(value: Variant ("Word"))
     a.append(value: Variant ("Foo"))
@@ -87,10 +87,8 @@ func loadScene (scene: SceneTree) {
     scene.root?.addChild(node: rootNode)
 }
 
-@Godot
 class SpinningCube: Node3D {
-
-    override func _ready() {
+    public override func _ready() {
         let meshRender = MeshInstance3D()
         meshRender.mesh = BoxMesh()
         addChild(node: meshRender)
